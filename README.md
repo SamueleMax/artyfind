@@ -1,0 +1,11 @@
+# Database
+- Posts table
+  - uuid varchar(36)
+  - title varchar(36)
+  - address varchar(255)
+  - description text
+  - image varchar(36)
+- Users table
+  - uuid varchar(36)
+  - username varchar(36)
+  - password varchar(36)
