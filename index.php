@@ -55,30 +55,30 @@
                             <h5 class="modal-title">Nuovo post</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
-                            <form>
-                                <div class="mb-3">
-                                    <label for="postName" class="col-form-label">Titolo:</label>
-                                    <input type="text" class="form-control" id="postName" name="postName">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="postAddress" class="col-form-label">Indirizzo:</label>
-                                    <input type="text" class="form-control" id="postAddress" name="postAddress">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="postDescription" class="col-form-label">Descrizione:</label>
-                                    <textarea class="form-control" id="postDescription" name="postDescription"></textarea>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="postDescription" class="col-form-label">Foto:</label>
-                                    <input type="file" class="form-control" id="postImage" name="postImage">
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                            <button type="button" class="btn btn-primary">Pubblica</button>
-                        </div>
+                        <form>
+                            <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label for="postName" class="col-form-label">Titolo:</label>
+                                        <input type="text" class="form-control" id="postName" name="postName">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="postAddress" class="col-form-label">Indirizzo:</label>
+                                        <input type="text" class="form-control" id="postAddress" name="postAddress">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="postDescription" class="col-form-label">Descrizione:</label>
+                                        <textarea class="form-control" id="postDescription" name="postDescription"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="postDescription" class="col-form-label">Foto:</label>
+                                        <input type="file" class="form-control" id="postImage" name="postImage">
+                                    </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                                <button type="submit" class="btn btn-primary">Pubblica</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
