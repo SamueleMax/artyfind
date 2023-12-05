@@ -35,11 +35,54 @@
                     </div>
                 </div>
             </nav>
+
+            <div class="container mt-4">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newPostModal">
+                    Nuovo post
+                </button>
+            </div>
         </header>
 
         <main>
 
         </main>
+
+        <aside>
+            <div class="modal fade" id="newPostModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="newPostModal" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Nuovo post</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="postName" class="col-form-label">Titolo:</label>
+                                    <input type="text" class="form-control" id="postName" name="postName">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="postAddress" class="col-form-label">Indirizzo:</label>
+                                    <input type="text" class="form-control" id="postAddress" name="postAddress">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="postDescription" class="col-form-label">Descrizione:</label>
+                                    <textarea class="form-control" id="postDescription" name="postDescription"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="postDescription" class="col-form-label">Foto:</label>
+                                    <input type="file" class="form-control" id="postImage" name="postImage">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                            <button type="button" class="btn btn-primary">Pubblica</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     </body>
