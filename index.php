@@ -1,3 +1,32 @@
+<?php
+require 'config.php';
+
+if (isset($_GET['action']) && $_GET['action'] === 'newpost') {
+    // Connect to database
+    try {
+        $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4");
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+    }
+
+    // Create a new post
+    if (isset($_POST['postTitle']) &&
+        isset($_POST['postAddress']) &&
+        isset($_POST['postDescription']) &&
+        isset($_POST['postImage'])) {
+        // Post information
+        $postTitle = trim($_POST['postTitle']);
+        $postAddress = trim($_POST['postAddress']);
+        $postDescription = trim($_POST['description']);
+        if (strlen($postTitle) > $min_title_length && strlen($postTitle) < $max_title_length &&
+            strlen($postAddress) > $min_address_length && strlen($postAddress) < $max_address_length &&
+            strlen($postDescription) > $min_description_length && strlen($postDescription) < $max_description_length) {
+                // Post image
+                $imageName = uniqid();
+        }
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="it">
     <head>
@@ -11,7 +40,7 @@
         <header>
             <nav class="navbar navbar-expand-lg bg-body-tertiary">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="/index.php">
+                    <a class="navbar-brand" href="index.php">
                         <img src="imgs/logo.png" alt="Logo" width="48" height="48">
                     </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,11 +85,11 @@
                             <h5 class="modal-title">Nuovo post</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form>
+                        <form action="index.php?action=newpost" method="post">
                             <div class="modal-body">
                                     <div class="mb-3">
-                                        <label for="postName" class="col-form-label">Titolo:</label>
-                                        <input type="text" class="form-control" id="postName" name="postName">
+                                        <label for="postTitle" class="col-form-label">Titolo:</label>
+                                        <input type="text" class="form-control" id="postTitle" name="postTitle">
                                     </div>
                                     <div class="mb-3">
                                         <label for="postAddress" class="col-form-label">Indirizzo:</label>
