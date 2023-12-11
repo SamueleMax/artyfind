@@ -4,7 +4,7 @@ require 'config.php';
 if (isset($_GET['action']) && $_GET['action'] === 'newpost') {
     // Connect to database
     try {
-        $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4");
+        $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $password);
     } catch (PDOException $e) {
         echo $e->getMessage();
     }
@@ -13,16 +13,26 @@ if (isset($_GET['action']) && $_GET['action'] === 'newpost') {
     if (isset($_POST['postTitle']) &&
         isset($_POST['postAddress']) &&
         isset($_POST['postDescription']) &&
-        isset($_POST['postImage'])) {
+        isset($_FILES['postImage'])) {
         // Post information
         $postTitle = trim($_POST['postTitle']);
         $postAddress = trim($_POST['postAddress']);
-        $postDescription = trim($_POST['description']);
+        $postDescription = trim($_POST['postDescription']);
         if (strlen($postTitle) > $min_title_length && strlen($postTitle) < $max_title_length &&
             strlen($postAddress) > $min_address_length && strlen($postAddress) < $max_address_length &&
             strlen($postDescription) > $min_description_length && strlen($postDescription) < $max_description_length) {
                 // Post image
                 $imageName = uniqid();
+                $target_path = 'content/' . $imageName . '.' . strtolower(pathinfo($_FILES['postImage']['name'], PATHINFO_EXTENSION));
+                $image = getimagesize($_FILES['postImage']['tmp_name']);
+                if ($image !== false) {
+                    // Only uploads images < 20 MB
+                    if ($_FILES['postImage']['size'] < (20 * 1_000_000)) {
+                        if (!file_exists($target_path)) {
+                            move_uploaded_file($_FILES['postImage']['tmp_name'], $target_path);
+                        }
+                    }
+                }
         }
     }
 }
@@ -85,7 +95,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'newpost') {
                             <h5 class="modal-title">Nuovo post</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form action="index.php?action=newpost" method="post">
+                        <form action="index.php?action=newpost" method="post" enctype="multipart/form-data">
                             <div class="modal-body">
                                     <div class="mb-3">
                                         <label for="postTitle" class="col-form-label">Titolo:</label>
