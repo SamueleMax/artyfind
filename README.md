@@ -1,11 +1,10 @@
 # Database
-- Posts table
-  - uuid varchar(36)
-  - title varchar(36)
+Name: artyfind
+User: ninja
+Password: ninja
+- Posts table:
+  - uuid varchar(255)
+  - title varchar(255)
   - address varchar(255)
   - description text
-  - image varchar(36)
-- Users table
-  - uuid varchar(36)
-  - username varchar(36)
-  - password varchar(36)
+  - image varchar(255)
