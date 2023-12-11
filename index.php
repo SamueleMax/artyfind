@@ -1,14 +1,14 @@
 <?php
 require 'config.php';
 
-if (isset($_GET['action']) && $_GET['action'] === 'newpost') {
-    // Connect to database
-    try {
-        $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $password);
-    } catch (PDOException $e) {
-        echo $e->getMessage();
-    }
+// Connect to database
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $password);
+} catch (PDOException $e) {
+    echo $e->getMessage();
+}
 
+if (isset($_GET['action']) && $_GET['action'] === 'newpost') {
     // Create a new post
     if (isset($_POST['postTitle']) &&
         isset($_POST['postAddress']) &&
@@ -44,9 +44,12 @@ if (isset($_GET['action']) && $_GET['action'] === 'newpost') {
                 }
         }
     }
-
-    $pdo = null;
 }
+
+// Retrieve posts
+$stmt = $pdo->query('SELECT title, address, description, image FROM posts');
+
+$pdo = null;
 ?>
 <!DOCTYPE html>
 <html lang="it">
@@ -94,8 +97,15 @@ if (isset($_GET['action']) && $_GET['action'] === 'newpost') {
             </div>
         </header>
 
-        <main>
-
+        <main class="container">
+            <?php while ($row = $stmt->fetch()): ?>
+                <div>
+                    <p>Title: <?= $row['title'] ?></p>
+                    <p>Address: <?= $row['address'] ?></p>
+                    <p>Description: <?= $row['description'] ?></p>
+                    <p>Image: <?= $row['image'] ?></p>
+                </div>
+            <?php endwhile; ?>
         </main>
 
         <aside>
