@@ -22,19 +22,30 @@ if (isset($_GET['action']) && $_GET['action'] === 'newpost') {
             strlen($postAddress) > $min_address_length && strlen($postAddress) < $max_address_length &&
             strlen($postDescription) > $min_description_length && strlen($postDescription) < $max_description_length) {
                 // Post image
-                $imageName = uniqid();
-                $target_path = 'content/' . $imageName . '.' . strtolower(pathinfo($_FILES['postImage']['name'], PATHINFO_EXTENSION));
+                $imageUuid = uniqid();
+                $target_path = 'content/' . $imageUuid . '.' . strtolower(pathinfo($_FILES['postImage']['name'], PATHINFO_EXTENSION));
                 $image = getimagesize($_FILES['postImage']['tmp_name']);
                 if ($image !== false) {
                     // Only uploads images < 20 MB
                     if ($_FILES['postImage']['size'] < (20 * 1_000_000)) {
                         if (!file_exists($target_path)) {
                             move_uploaded_file($_FILES['postImage']['tmp_name'], $target_path);
+                            // Add entry to database
+                            $stmt = $pdo->prepare('INSERT INTO posts (uuid, title, address, description, image)
+                            VALUES (:uuid, :title, :address, :description, :image)');
+                            $stmt->bindParam(':uuid', $imageUuid);
+                            $stmt->bindParam(':title', $postTitle);
+                            $stmt->bindParam(':address', $postAddress);
+                            $stmt->bindParam(':description', $postDescription);
+                            $stmt->bindParam(':image', $target_path);
+                            $stmt->execute();
                         }
                     }
                 }
         }
     }
+
+    $pdo = null;
 }
 ?>
 <!DOCTYPE html>
