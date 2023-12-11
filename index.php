@@ -73,7 +73,7 @@ $pdo = null;
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="/index.php"><i class="bi bi-house-fill"></i> Home</a>
+                                <a class="nav-link active" aria-current="page" href="index.php"><i class="bi bi-house-fill"></i> Home</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/map.php"><i class="bi bi-geo-alt-fill"></i> Mappa</a>
@@ -97,13 +97,16 @@ $pdo = null;
             </div>
         </header>
 
-        <main class="container">
+        <main class="container mt-3 d-flex gap-2">
             <?php while ($row = $stmt->fetch()): ?>
-                <div>
-                    <p>Title: <?= $row['title'] ?></p>
-                    <p>Address: <?= $row['address'] ?></p>
-                    <p>Description: <?= $row['description'] ?></p>
-                    <p>Image: <?= $row['image'] ?></p>
+                <div class="card" style="width: 30rem;">
+                    <img style="height: 300px" class="card-img-top object-fit-cover" src="<?= $row['image'] ?>">
+                    <div class="card-body">
+                        <h5 class="card-title"><?= htmlspecialchars($row['title']) ?></h5>
+                        <p class="text-secondary"><?= htmlspecialchars($row['address']) ?></p>
+                        <p><?= htmlspecialchars($row['description']) ?></p>
+                        <a href="#" class="btn btn-primary">Vai al post <i class="bi bi-arrow-right"></i></a>
+                    </div>
                 </div>
             <?php endwhile; ?>
         </main>
