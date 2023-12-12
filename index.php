@@ -97,9 +97,9 @@ $pdo = null;
             </div>
         </header>
 
-        <main class="container mt-3 d-flex gap-2">
+        <main class="container mt-3 d-flex gap-4 flex-column align-items-center">
             <?php while ($row = $stmt->fetch()): ?>
-                <div class="card" style="width: 30rem;">
+                <div class="card" style="width: 100%; max-width: 35rem;">
                     <img style="height: 300px" class="card-img-top object-fit-cover" src="<?= $row['image'] ?>">
                     <div class="card-body">
                         <h5 class="card-title"><?= htmlspecialchars($row['title']) ?></h5>
