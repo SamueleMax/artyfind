@@ -69,7 +69,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'newpost') {
 }
 
 // Retrieve posts
-$stmt = $pdo->query('SELECT title, address, description, image FROM posts');
+$stmt = $pdo->query('SELECT uuid, title, address, description, image FROM posts');
 
 $pdo = null;
 ?>
@@ -128,12 +128,12 @@ $pdo = null;
         <main class="container mt-3 d-flex gap-4 flex-column align-items-center">
             <?php while ($row = $stmt->fetch()): ?>
                 <div class="card" style="width: 100%; max-width: 35rem;">
-                    <img style="height: 300px" class="card-img-top object-fit-cover" src="<?= $row['image'] ?>">
+                    <img style="height: 300px" class="card-img-top object-fit-cover" src="<?= htmlspecialchars($row['image']) ?>">
                     <div class="card-body">
                         <h5 class="card-title"><?= htmlspecialchars($row['title']) ?></h5>
                         <p class="text-secondary"><?= htmlspecialchars($row['address']) ?></p>
                         <p><?= htmlspecialchars($row['description']) ?></p>
-                        <a href="#" class="btn btn-primary">Vai al post <i class="bi bi-arrow-right"></i></a>
+                        <a href="posts.php?uuid=<?= htmlspecialchars($row['uuid']) ?>" class="btn btn-primary">Vai al post <i class="bi bi-arrow-right"></i></a>
                     </div>
                 </div>
             <?php endwhile; ?>
