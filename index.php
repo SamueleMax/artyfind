@@ -1,6 +1,13 @@
 <?php
 require 'config.php';
 
+/* This variable is used to show alerts to the user.
+   <Bootstrap Alert Type> => <Alert Text>
+   So, for example:
+   primary => Error uploading the file.
+   The alert types */
+$alerts = [];
+
 // Connect to database
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $password);
@@ -18,30 +25,45 @@ if (isset($_GET['action']) && $_GET['action'] === 'newpost') {
         $postTitle = trim($_POST['postTitle']);
         $postAddress = trim($_POST['postAddress']);
         $postDescription = trim($_POST['postDescription']);
-        if (strlen($postTitle) > $min_title_length && strlen($postTitle) < $max_title_length &&
-            strlen($postAddress) > $min_address_length && strlen($postAddress) < $max_address_length &&
-            strlen($postDescription) > $min_description_length && strlen($postDescription) < $max_description_length) {
-                // Post image
-                $imageUuid = uniqid();
-                $target_path = 'content/' . $imageUuid . '.' . strtolower(pathinfo($_FILES['postImage']['name'], PATHINFO_EXTENSION));
-                $image = getimagesize($_FILES['postImage']['tmp_name']);
-                if ($image !== false) {
-                    // Only uploads images < 20 MB
-                    if ($_FILES['postImage']['size'] < (20 * 1_000_000)) {
-                        if (!file_exists($target_path)) {
-                            move_uploaded_file($_FILES['postImage']['tmp_name'], $target_path);
-                            // Add entry to database
-                            $stmt = $pdo->prepare('INSERT INTO posts (uuid, title, address, description, image)
-                            VALUES (:uuid, :title, :address, :description, :image)');
-                            $stmt->bindParam(':uuid', $imageUuid);
-                            $stmt->bindParam(':title', $postTitle);
-                            $stmt->bindParam(':address', $postAddress);
-                            $stmt->bindParam(':description', $postDescription);
-                            $stmt->bindParam(':image', $target_path);
-                            $stmt->execute();
+        if (strlen($postTitle) >= $min_title_length && strlen($postTitle) <= $max_title_length) {
+            if (strlen($postAddress) >= $min_address_length && strlen($postAddress) <= $max_address_length) {
+                if (strlen($postDescription) >= $min_description_length && strlen($postDescription) <= $max_description_length) {
+                    // Post image
+                    $imageUuid = uniqid();
+                    $target_path = 'content/' . $imageUuid . '.' . strtolower(pathinfo($_FILES['postImage']['name'], PATHINFO_EXTENSION));
+                    $image = getimagesize($_FILES['postImage']['tmp_name']);
+                    if ($image !== false) {
+                        // Only uploads images < 20 MB
+                        if ($_FILES['postImage']['size'] < (20 * 1_000_000)) {
+                            if (!file_exists($target_path)) {
+                                move_uploaded_file($_FILES['postImage']['tmp_name'], $target_path);
+                                // Add entry to database
+                                $stmt = $pdo->prepare('INSERT INTO posts (uuid, title, address, description, image)
+                                VALUES (:uuid, :title, :address, :description, :image)');
+                                $stmt->bindParam(':uuid', $imageUuid);
+                                $stmt->bindParam(':title', $postTitle);
+                                $stmt->bindParam(':address', $postAddress);
+                                $stmt->bindParam(':description', $postDescription);
+                                $stmt->bindParam(':image', $target_path);
+                                $stmt->execute();
+                                $alerts += ['success' => 'Post creato con successo!'];
+                            } else {
+                                $alerts += ['danger' => 'Si è verificato un\'errore durante il caricamento del file. Attendi qualche secondo e riprova.'];
+                            }
+                        } else {
+                            $alerts += ['danger' => 'Il file caricato non deve superare i 20 MB.'];
                         }
+                    } else {
+                        $alerts += ['danger' => 'Il file caricato non è nel formato corretto.'];
                     }
+                } else {
+                    $alerts += ['danger' => "La descrizione deve essere compresa tra $min_description_length e $max_description_length caratteri."];
                 }
+            } else {
+                $alerts += ['danger' => "L'indirizzo deve essere comprso tra $min_address_length e $max_address_length caratteri."];
+            }
+        } else {
+            $alerts += ['danger' => "Il titolo deve essere compreso tra $min_title_length e $max_title_length caratteri."];
         }
     }
 }
@@ -76,10 +98,10 @@ $pdo = null;
                                 <a class="nav-link active" aria-current="page" href="index.php"><i class="bi bi-house-fill"></i> Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/map.php"><i class="bi bi-geo-alt-fill"></i> Mappa</a>
+                                <a class="nav-link" href="map.php"><i class="bi bi-geo-alt-fill"></i> Mappa</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/profile.php"><i class="bi bi-person-fill"></i> Profilo</a>
+                                <a class="nav-link" href="profile.php"><i class="bi bi-person-fill"></i> Profilo</a>
                             </li>
                         </ul>
                         <form class="d-flex" role="search">
@@ -91,6 +113,12 @@ $pdo = null;
             </nav>
 
             <div class="container mt-4">
+                <?php foreach ($alerts as $type => $text): ?>
+                    <div class="alert alert-<?= $type ?> alert-dismissible" role="alert">
+                        <div><?= $text ?></div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <?php endforeach; ?>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newPostModal">
                     <i class="bi bi-plus"></i> Nuovo post
                 </button>
